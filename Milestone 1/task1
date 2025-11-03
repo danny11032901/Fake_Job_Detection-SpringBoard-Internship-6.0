@@ -1,3 +1,5 @@
+
+##Data Understanding
 import pandas as pd
 
 df = pd.read_csv(r"D:\springboard intership 6.0\Classes\fake_job_postings.csv")
