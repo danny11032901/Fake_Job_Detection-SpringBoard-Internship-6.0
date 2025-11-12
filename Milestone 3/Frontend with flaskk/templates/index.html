@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fake Job Detection</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f2f2f2;
+            text-align: center;
+            padding: 40px;
+        }
+        form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 50%;
+            margin: auto;
+        }
+        textarea {
+            width: 90%;
+            height: 120px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h2>Fake Job Detection System</h2>
+    <form action="/predict" method="POST">
+        <label for="job_description"><b>Enter Job Description:</b></label><br><br>
+        <textarea name="job_description" placeholder="Paste job post text here..."></textarea><br>
+        <button type="submit">Check Authenticity</button>
+    </form>
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+</body>
+</html>
