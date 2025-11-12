@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 import joblib
 
-app = Flask(__name__)  # ✅ Correct: use __name__
+app = Flask(__name__)  
 
 # Load saved model and vectorizer
 model = joblib.load('D:/springboard intership 6.0/Internship 6.0 milestones/Milestone 3/Frontend with flaskk/fake_job_model.pkl')
@@ -32,5 +32,5 @@ def predict():
     return render_template('result.html', label=label, confidence=confidence, description=job_desc)
 
 
-if __name__ == '__main__':  # ✅ Correct condition
+if __name__ == '__main__': 
     app.run(debug=True)

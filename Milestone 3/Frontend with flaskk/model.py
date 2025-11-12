@@ -7,7 +7,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from sklearn.utils import shuffle
-import joblib  # ✅ for saving the model and vectorizer
+import joblib  
 import os
 
 # 1 Load and prepare dataset
@@ -65,7 +65,6 @@ for text, pred in zip(test_samples, predictions):
     label = "FAKE" if pred == 1 else "REAL"
     print(f"→ {label}: {text}")
 
-# ✅ Save model and vectorizer
 save_path = r"D:\springboard intership 6.0\Internship 6.0 milestones\Milestone 3\Frontend with flaskk"
 
 os.makedirs(save_path, exist_ok=True)
@@ -73,4 +72,4 @@ os.makedirs(save_path, exist_ok=True)
 joblib.dump(model, os.path.join(save_path, "fake_job_model.pkl"))
 joblib.dump(vectorizer, os.path.join(save_path, "tfidf_vectorizer.pkl"))
 
-print(f"\n✅ Model and vectorizer saved successfully in:\n{save_path}")
+print(f"\n Model and vectorizer saved successfully in:\n{save_path}")
