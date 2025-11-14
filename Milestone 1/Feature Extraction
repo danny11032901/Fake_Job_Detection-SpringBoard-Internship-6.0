@@ -11,7 +11,7 @@ nltk.download('punkt')
 nltk.download('punkt_tab')
 nltk.download('stopwords')
 
-df = pd.read_csv("fake_job_postings.csv")
+df = pd.read_csv("D:/springboard intership 6.0/Classes/fake_job_postings.csv")
 
 def clean_text(text):
     text = str(text)
