@@ -1,36 +1,61 @@
 from flask import Flask, render_template, request
 import joblib
+import pandas as pd
+from datetime import datetime
+import os
 
-app = Flask(__name__)  
+app = Flask(__name__)
 
-# Load saved model and vectorizer
-model = joblib.load('D:/springboard intership 6.0/Internship 6.0 milestones/Milestone 3/Frontend with flaskk/fake_job_model.pkl')
-vectorizer = joblib.load('D:/springboard intership 6.0/Internship 6.0 milestones/Milestone 3/Frontend with flaskk/tfidf_vectorizer.pkl')
+# Load model and vectorizer
+model = joblib.load("saved_model/fake_job_model.pkl")
+vectorizer = joblib.load("saved_model/tfidf_vectorizer.pkl")
+
+LOG_FILE = "predictions_log.csv"
+
+# Create CSV file if not exists
+if not os.path.exists(LOG_FILE):
+    df = pd.DataFrame(columns=["job_description", "prediction", "confidence", "timestamp"])
+    df.to_csv(LOG_FILE, index=False)
 
 
-
-@app.route('/')
+@app.route("/")
 def home():
-    return render_template('index.html')
+    return render_template("index.html")
 
 
-@app.route('/predict', methods=['POST'])
+@app.route("/predict", methods=["POST"])
 def predict():
-    job_desc = request.form['job_description']
+    job_desc = request.form["job_description"]
 
-    if not job_desc.strip():
-        return render_template('index.html', error="Please enter a job description.")
+    # Transform input
+    features = vectorizer.transform([job_desc])
 
-    # Transform and predict
-    X_input = vectorizer.transform([job_desc])
-    prediction = model.predict(X_input)[0]
-    prob = model.predict_proba(X_input)[0][1]
+    # Prediction + probability
+    pred = model.predict(features)[0]
+    prob = model.predict_proba(features)[0][pred] * 100
 
-    label = "Fake Job" if prediction == 1 else "Real Job"
-    confidence = round(prob * 100, 2) if prediction == 1 else round((1 - prob) * 100, 2)
+    label = "Fake Job" if pred == 1 else "Real Job"
 
-    return render_template('result.html', label=label, confidence=confidence, description=job_desc)
+    # --- Log to CSV ---
+    log_row = pd.DataFrame([{
+        "job_description": job_desc,
+        "prediction": label,
+        "confidence": f"{prob:.2f}%",
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }])
+
+    log_row.to_csv(LOG_FILE, mode='a', header=False, index=False)
+
+    return render_template("result.html",
+                           prediction=label,
+                           confidence=f"{prob:.2f}%")
 
 
-if __name__ == '__main__': 
+@app.route("/history")
+def history():
+    df = pd.read_csv(LOG_FILE)
+    return render_template("history.html", tables=df.to_dict(orient="records"))
+    
+
+if __name__ == "__main__":
     app.run(debug=True)

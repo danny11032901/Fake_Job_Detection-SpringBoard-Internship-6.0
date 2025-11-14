@@ -73,6 +73,23 @@
             transform: translateY(-2px);
         }
 
+        .history-btn {
+            margin-top: 15px;
+            background: #333;
+            padding: 10px 22px;
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .history-btn:hover {
+            background: #555;
+            transform: translateY(-2px);
+        }
+
         .error {
             margin-top: 15px;
             color: #e74c3c;
@@ -88,11 +105,16 @@
 <body>
     <div class="container">
         <h2>Fake Job Detection System</h2>
+
         <form action="/predict" method="POST">
             <label for="job_description">Enter Job Description:</label>
-            <textarea name="job_description" placeholder="Paste job post text here..."></textarea>
+            <textarea name="job_description" placeholder="Paste job post text here..." required></textarea>
             <button type="submit">Check Authenticity</button>
         </form>
+
+        <!-- View History Button -->
+        <a href="/history" class="history-btn">View Prediction History</a>
+
         {% if error %}
             <p class="error">{{ error }}</p>
         {% endif %}
